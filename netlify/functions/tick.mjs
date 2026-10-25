@@ -4,10 +4,11 @@ const HOUR = 60 * 60 * 1000;
 
 // Si a estas horas todavía no ha escrito nada, se le recuerda con cariño.
 const NUDGES = [
-  { from: [12, 0], to: [13, 0], body: "🙏 ¿Qué te ha dicho Dios hoy? Escríbelo y te lo recuerdo durante el día." },
-  { from: [17, 30], to: [18, 30], body: "🕊️ Todavía estás a tiempo: ¿qué te ha dicho Dios hoy?" },
+  { from: [12, 0], to: [13, 0], body: "Escríbelo y te lo recuerdo durante el día." },
+  { from: [17, 30], to: [18, 30], body: "Todavía estás a tiempo de escribirlo." },
 ];
 
+// iPhone ya muestra "from Recordar hoy" debajo, así que el título dice de qué se trata.
 // Corre cada 5 minutos: manda la pregunta de la mañana y los recordatorios que ya tocan.
 export default async () => {
   const store = subs();
@@ -32,7 +33,7 @@ export default async () => {
       changed = true;
     }
     if (!rec.morningSent && now >= rec.morningAt) {
-      out.push({ title: "Recordar hoy", body: "🌅 ¿Qué quieres recordar hoy?", tag: "morning" });
+      out.push({ title: "Buenos días", body: "¿Qué quieres recordar hoy?", tag: "morning" });
       rec.morningSent = true;
       changed = true;
     }
@@ -46,13 +47,13 @@ export default async () => {
     }
     rec.nudges.forEach((n, i) => {
       if (n.sent || now < n.at) return;
-      if (rec.intentionDay !== today) out.push({ title: "Recordar hoy", body: NUDGES[i].body, tag: "nudge" });
+      if (rec.intentionDay !== today) out.push({ title: "¿Qué te ha dicho Dios hoy?", body: NUDGES[i].body, tag: "nudge" });
       n.sent = true;
       changed = true;
     });
     for (const r of rec.reminders || []) {
       if (!r.sent && now >= r.at) {
-        if (now - r.at < 3 * HOUR && rec.intention) out.push({ title: "Recordar hoy ✨", body: rec.intention, tag: "r" + r.at });
+        if (now - r.at < 3 * HOUR && rec.intention) out.push({ title: "Tu intención de hoy", body: rec.intention, tag: "r" + r.at });
         r.sent = true;
         changed = true;
       }

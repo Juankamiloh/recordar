@@ -38,7 +38,8 @@ button{cursor:pointer}
 .date{color:var(--muted);font-size:.95rem;margin:0 0 1.5rem}
 .view{display:none}.view.on{display:block}
 
-.notice{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:1rem 1.1rem;margin:0 0 2rem}
+/* Esquinas: tarjetas y grupos 20, campos 14, botones en píldora. */
+.notice{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:1rem 1.1rem;margin:0 0 2rem}
 .notice p{margin:0 0 .75rem}
 .notice p:last-child{margin-bottom:0}
 .notice ol{margin:.25rem 0 0;padding-left:1.2rem}
@@ -48,22 +49,48 @@ button{cursor:pointer}
 textarea{width:100%;min-height:7rem;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:1rem;font-family:var(--serif);font-size:1.3rem;line-height:1.4;resize:vertical}
 .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 1.5rem}
 .chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:.4rem .85rem;font-size:.9rem;color:var(--muted)}
-.btn{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:14px;padding:.95rem 1rem;font-weight:600;background:var(--ink);color:var(--bg)}
+.btn{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:999px;padding:.95rem 1rem;font-weight:600;background:var(--ink);color:var(--bg);transition:transform .12s cubic-bezier(.23,1,.32,1)}
+.btn:active:not(:disabled){transform:scale(.97)}
 .btn.gold{background:var(--gold);color:#1a1405}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500}
 .btn:disabled{opacity:.4;cursor:default}
 .stack>*+*{margin-top:.75rem}
 
-.sun{width:44px;height:44px;margin-bottom:1rem;color:var(--gold)}
-.intention{font-family:var(--serif);font-style:italic;font-size:clamp(2rem,8vw,2.8rem);line-height:1.12;margin:0 0 .75rem;overflow-wrap:anywhere}
-.sub{color:var(--muted);margin:0 0 2rem}
-.count{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:2rem 0}
-.count strong{font-family:var(--serif);font-size:2.2rem;font-weight:400;line-height:1;min-width:2ch}
-.count span{color:var(--muted);font-size:.95rem;flex:1}
-.count button{border:1px solid var(--gold);background:var(--gold-soft);color:var(--ink);border-radius:999px;padding:.5rem 1rem;font-weight:500}
-label.lbl{display:block;font-weight:600;margin:0 0 .5rem}
+.ico{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* El cuadro de la intención: un amanecer suave arriba */
+.card{position:relative;border-radius:20px;padding:1.25rem 1.35rem 1.35rem;border:1px solid color-mix(in srgb,var(--gold) 28%,transparent);
+  background:radial-gradient(130% 90% at 50% -10%,var(--gold-soft) 0%,var(--surface) 72%);box-shadow:0 10px 30px -14px rgba(0,0,0,.22)}
+.card-top{display:flex;align-items:center;gap:.5rem;color:var(--gold);font-size:.82rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin:0 0 .9rem}
+.card-top span{flex:1}
+.card-top .ico{width:26px;height:26px}
+.icon-btn{width:40px;height:40px;margin:-.5rem -.6rem -.5rem 0;display:grid;place-items:center;border:0;border-radius:999px;background:transparent;color:var(--muted)}
+.icon-btn:active{background:var(--line)}
+.icon-btn .ico{width:20px;height:20px}
+.intention{font-family:var(--serif);font-style:italic;font-size:clamp(1.9rem,7.5vw,2.5rem);line-height:1.15;margin:0;overflow-wrap:anywhere}
+.card-note{display:flex;gap:.5rem;align-items:flex-start;color:var(--muted);font-size:.92rem;line-height:1.4;margin:1.1rem 0 0;padding-top:.9rem;border-top:1px solid color-mix(in srgb,var(--gold) 22%,transparent)}
+.card-note .ico{width:18px;height:18px;margin-top:.1rem;color:var(--gold)}
+
+/* Diario del día */
+.diary{margin:2.25rem 0 0}
+.diary h2{font-size:1.5rem;margin:0 0 .2rem}
+.diary-sub{color:var(--muted);font-size:.92rem;margin:0 0 1rem}
+.notes{list-style:none;margin:0 0 1rem;padding:0}
+.notes li{display:flex;gap:.9rem;align-items:flex-start;padding:.8rem 0;border-top:1px solid var(--line)}
+.notes li:last-child{border-bottom:1px solid var(--line)}
+.notes time{flex:none;width:3.2rem;color:var(--gold);font-size:.85rem;font-weight:600;font-variant-numeric:tabular-nums;padding-top:.15rem}
+.notes p{flex:1;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.notes .icon-btn{width:36px;height:36px;margin:-.35rem -.5rem 0 0}
+.notes .icon-btn .ico{width:17px;height:17px}
+.composer{display:flex;gap:.5rem;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:.4rem .4rem .4rem 1rem}
+.composer:focus-within{border-color:var(--gold)}
+.composer textarea{border:0;background:transparent;padding:.55rem 0;min-height:0;height:2.6rem;max-height:10rem;font-family:var(--sans);font-size:1.05rem;resize:none;border-radius:0}
+.composer textarea:focus-visible{outline:none}
+.send{flex:none;width:40px;height:40px;border-radius:999px;border:0;display:grid;place-items:center;background:var(--gold);color:#1a1405;transition:transform .12s cubic-bezier(.23,1,.32,1),opacity .15s}
+.send:active:not(:disabled){transform:scale(.92)}
+.send:disabled{opacity:.3;cursor:default}
+.send .ico{width:20px;height:20px;stroke-width:2.2}
 .saved{color:var(--gold);font-size:.9rem;min-height:1.4em;margin:.4rem 0 0}
-.link{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font-size:.9rem;margin-top:1.5rem}
 
 .stats{display:flex;gap:2rem;margin:1rem 0 2rem}
 .stats div{font-size:.9rem;color:var(--muted)}
@@ -80,9 +107,21 @@ label.lbl{display:block;font-weight:600;margin:0 0 .5rem}
 .empty{color:var(--muted);padding-left:0 !important}
 
 .settings h1{font-size:2rem;margin-bottom:1.5rem}
-.settings h2{font-size:1.35rem;margin:2rem 0 .5rem}
-.settings p{margin:0 0 1rem}
-.status{font-weight:600}
+.gh{font-family:var(--sans) !important;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:1.75rem 0 .5rem 1rem}
+.group{background:var(--surface);border-radius:20px;overflow:hidden;border:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:.85rem;width:100%;min-height:3.4rem;padding:.6rem 1rem;background:none;border:0;text-align:left}
+.row+.row{border-top:1px solid var(--line)}
+button.row:active{background:var(--bg)}
+.row .ico{color:var(--gold)}
+.row .rl{flex:1}
+.row .rv{color:var(--muted);font-size:.92rem;text-align:right}
+.row .chev{color:var(--line);width:18px;height:18px;stroke-width:2.2}
+.foot{color:var(--muted);font-size:.88rem;margin:.6rem 1rem 0}
+.switch{position:relative;flex:none;width:51px;height:31px;border-radius:999px;border:0;padding:0;background:var(--line);transition:background .2s}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.23,1,.32,1)}
+.switch[aria-checked="true"]{background:var(--gold)}
+.switch[aria-checked="true"]::after{transform:translateX(20px)}
+.switch:disabled{opacity:.5}
 
 .welcome{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 1rem) 1.5rem calc(env(safe-area-inset-bottom,0px) + 1.5rem)}
 .welcome[hidden]{display:none}
@@ -96,7 +135,7 @@ label.lbl{display:block;font-weight:600;margin:0 0 .5rem}
 .w-verse{font-family:var(--serif);font-style:italic;font-size:1.25rem !important;color:var(--ink) !important;border-left:2px solid var(--gold);padding-left:1rem;margin-top:1rem !important}
 .w-art{margin:0 0 2rem}
 .w-sun{width:72px;height:72px;color:var(--gold)}
-.w-notif{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:.85rem 1rem;display:flex;gap:.75rem;align-items:flex-start;box-shadow:0 6px 24px rgba(22,35,58,.08)}
+.w-notif{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:.85rem 1rem;display:flex;gap:.75rem;align-items:flex-start;box-shadow:0 6px 24px rgba(0,0,0,.08)}
 .w-notif + .w-notif{margin-top:.6rem;opacity:.6;transform:scale(.97)}
 .w-notif img{width:38px;height:38px;border-radius:9px;flex:none}
 .w-notif b{display:block;font-size:.9rem}
@@ -118,6 +157,16 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="14" r="4"/><path d="M12 4v2.5M3.5 14H2M22 14h-1.5M6 8l1.6 1.6M18 8l-1.6 1.6M2 19.5h20"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5z"/><path d="M13.5 7l3 3"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 3.5 5v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zM12 6.5V20"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+</svg>
 <div class="welcome" id="welcome" hidden role="dialog" aria-label="Bienvenida">
   <div class="w-inner">
     <div class="w-top"><button class="w-skip" id="w-skip">Saltar</button></div>
@@ -132,8 +181,8 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 
     <div class="w-slide" data-s="1" hidden>
       <div class="w-art">
-        <div class="w-notif"><img src="/icon-192.png" alt=""><div><b>Recordar hoy ✨</b><span>Tener más temor de Dios</span></div><small>11:42</small></div>
-        <div class="w-notif"><img src="/icon-192.png" alt=""><div><b>Recordar hoy ✨</b><span>Tener más temor de Dios</span></div><small>3:17</small></div>
+        <div class="w-notif"><img src="/icon-192.png" alt=""><div><b>Tu intención de hoy</b><span>Tener más temor de Dios</span></div><small>11:42</small></div>
+        <div class="w-notif"><img src="/icon-192.png" alt=""><div><b>Tu intención de hoy</b><span>Tener más temor de Dios</span></div><small>3:17</small></div>
       </div>
       <h2>Dios en medio de tu día</h2>
       <p>Durante el día te llegará eso que anotaste 4 veces, en momentos sorpresa.</p>
@@ -170,21 +219,25 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
     </div>
 
     <div id="show" hidden>
-      <svg class="sun" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="26" r="8" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 8v5M8 26H4M40 26h-4M11.5 15.5l3 3M32.5 15.5l-3 3"/><path d="M4 36h36" opacity=".5"/></g></svg>
-      <p class="intention" id="intention-text"></p>
-      <p class="sub" id="sched-note"></p>
+      <article class="card">
+        <div class="card-top">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"/></svg>
+          <span>Mi intención de hoy</span>
+          <button class="icon-btn" id="edit" aria-label="Cambiar la intención de hoy"><svg class="ico" viewBox="0 0 24 24"><use href="#i-pencil"/></svg></button>
+        </div>
+        <p class="intention" id="intention-text"></p>
+        <p class="card-note"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"/></svg><span id="sched-note"></span></p>
+      </article>
 
-      <div class="count">
-        <strong id="rem-count">0</strong>
-        <span>veces que me detuve a recordarlo hoy</span>
-        <button id="rem-btn">Lo recordé</button>
-      </div>
-
-      <label class="lbl" for="in-reflection">Al final del día: ¿cómo lo viviste?</label>
-      <textarea id="in-reflection" placeholder="Algo que aprendiste, un momento en que lo aplicaste, algo que agradecer…"></textarea>
-      <p class="saved" id="refl-saved" aria-live="polite"></p>
-
-      <button class="link" id="edit">Cambiar la intención de hoy</button>
+      <section class="diary" aria-labelledby="diary-h">
+        <h2 id="diary-h">Mi diario de hoy</h2>
+        <p class="diary-sub" id="diary-sub"></p>
+        <ul class="notes" id="notes"></ul>
+        <div class="composer">
+          <textarea id="in-note" rows="1" maxlength="1000" aria-label="Escribe en tu diario"></textarea>
+          <button class="send" id="add-note" disabled aria-label="Guardar en el diario"><svg class="ico" viewBox="0 0 24 24"><use href="#i-up"/></svg></button>
+        </div>
+      </section>
     </div>
   </section>
 
@@ -199,17 +252,28 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 
   <section id="v-ajustes" class="view settings" aria-label="Ajustes">
     <h1>Ajustes</h1>
-    <h2>Notificaciones</h2>
-    <p>Estado: <span class="status" id="notif-status"></span></p>
-    <div class="stack" id="notif-actions"></div>
-    <h2>Cómo funciona</h2>
-    <p>Cada mañana, en un momento sorpresa entre 6:30 y 9:00, te llega la pregunta. Anotas lo que Dios te habló en tu devocional o lo que quieres recordar y durante el día recibes tu frase 4 veces, en horas al azar hasta las 9:30 p. m.</p>
-    <p>Lo que escribes en tu camino se guarda solo en este teléfono.</p>
-    <button class="btn ghost" id="show-intro">Ver la introducción</button>
-    <h2>Compartir</h2>
-    <p>Envíale la app a alguien que quieras que camine contigo.</p>
-    <button class="btn ghost" id="share">Compartir la app</button>
-    <p class="saved" id="share-msg" aria-live="polite"></p>
+    <div class="group">
+      <div class="row">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"/></svg>
+        <span class="rl" id="notif-label">Notificaciones</span>
+        <span id="notif-ctl"></span>
+      </div>
+    </div>
+    <p class="foot" id="notif-help" hidden></p>
+
+    <h2 class="gh">Tu día</h2>
+    <div class="group">
+      <div class="row"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sun"/></svg><span class="rl">La pregunta</span><span class="rv">6:30 a 9:00 a. m.</span></div>
+      <div class="row"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-bell"/></svg><span class="rl">Tu frase</span><span class="rv">4 veces, hasta 9:30 p. m.</span></div>
+      <div class="row"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pencil"/></svg><span class="rl">Si no has escrito</span><span class="rv">mediodía y tarde</span></div>
+    </div>
+
+    <div class="group" style="margin-top:1.75rem">
+      <button class="row" id="share"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg><span class="rl">Compartir la app</span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <button class="row" id="show-intro"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-book"/></svg><span class="rl">Ver la introducción</span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
+    </div>
+    <p class="foot">Lo que escribes se guarda solo en este teléfono.</p>
+    <p class="saved foot" id="share-msg" aria-live="polite"></p>
   </section>
 </main>
 
@@ -226,6 +290,12 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
   var state={days:{},subId:null};
   try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.days)state=p;}}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+  // La reflexión de la noche pasó a ser la primera nota del diario (sin hora).
+  Object.keys(state.days).forEach(function(k){
+    var d=state.days[k];
+    if(!d.notes){d.notes=d.reflection&&d.reflection.trim()?[{at:null,text:d.reflection.trim()}]:[];}
+    delete d.reflection;
+  });
   var $=function(id){return document.getElementById(id);};
   var tz=(function(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone;}catch(e){return 'UTC';}})();
 
@@ -311,10 +381,18 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
   }
 
   function renderSettings(){
-    var s=notifState(),st=$('notif-status'),a=$('notif-actions');a.innerHTML='';
-    st.textContent={on:'activadas',off:'apagadas',denied:'bloqueadas en el teléfono',install:'falta agregar la app a inicio',unsupported:'no disponibles en este navegador'}[s];
-    if(s==='on'){var b=document.createElement('button');b.className='btn ghost';b.textContent='Desactivar notificaciones';b.onclick=disable;a.appendChild(b);}
-    if(s==='off'){var c=document.createElement('button');c.className='btn gold';c.textContent='Activar notificaciones';c.onclick=function(){enable(c);};a.appendChild(c);}
+    var s=notifState(),ctl=$('notif-ctl'),help=$('notif-help');ctl.innerHTML='';
+    if(s==='on'||s==='off'){
+      var sw=document.createElement('button');sw.className='switch';sw.setAttribute('role','switch');
+      sw.setAttribute('aria-checked',s==='on');sw.setAttribute('aria-labelledby','notif-label');
+      sw.onclick=function(){if(s==='on')disable();else{sw.setAttribute('aria-checked','true');sw.disabled=true;enable();}};
+      ctl.appendChild(sw);
+    }else{
+      var v=document.createElement('span');v.className='rv';
+      v.textContent={denied:'Bloqueadas',install:'Falta un paso',unsupported:'No disponibles'}[s];ctl.appendChild(v);
+    }
+    var h={denied:'Actívalas en Ajustes del teléfono → Notificaciones → Recordar hoy.',install:'En Safari toca Compartir → Agregar a inicio y abre la app desde el ícono.',unsupported:'Abre la app en Safari (iPhone) o Chrome (Android).'}[s];
+    help.hidden=!h;help.textContent=h||'';
   }
 
   // ---------- Hoy ----------
@@ -324,26 +402,44 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 
   $('save-intention').onclick=function(){
     var t=$('in-intention').value.trim();if(!t)return;
-    var d=today()||{remembered:0,reflection:''};
+    var d=today()||{notes:[]};
     d.intention=t;d.scheduled=null;state.days[todayKey]=d;save();renderToday();
     $('save-intention').disabled=true;
     sendIntention(d).then(renderToday);
   };
   $('edit').onclick=function(){$('in-intention').value=(today()||{}).intention||'';updSave();$('ask').hidden=false;$('show').hidden=true;$('in-intention').focus();};
-  $('rem-btn').onclick=function(){var d=today();if(!d)return;d.remembered=(d.remembered||0)+1;save();$('rem-count').textContent=d.remembered;};
-  var rt;
-  $('in-reflection').addEventListener('input',function(){
-    var d=today();if(!d)return;d.reflection=this.value;clearTimeout(rt);
-    rt=setTimeout(function(){save();$('refl-saved').textContent='Guardado';setTimeout(function(){$('refl-saved').textContent='';},1500);},500);
-  });
+
+  // ---------- Diario ----------
+  var noteIn=$('in-note');
+  function fitNote(){noteIn.style.height='auto';noteIn.style.height=noteIn.scrollHeight+'px';$('add-note').disabled=!noteIn.value.trim();}
+  noteIn.addEventListener('input',fitNote);
+  $('add-note').onclick=function(){
+    var d=today(),t=noteIn.value.trim();if(!d||!t)return;
+    d.notes=d.notes||[];d.notes.push({at:Date.now(),text:t});save();
+    noteIn.value='';fitNote();renderNotes();
+  };
+  function hourOf(ms){try{return new Date(ms).toLocaleTimeString('es',{hour:'numeric',minute:'2-digit'});}catch(e){return '';}}
+  function renderNotes(){
+    var d=today(),ul=$('notes');ul.innerHTML='';
+    var late=new Date().getHours()>=18;
+    $('diary-sub').textContent=late?'¿Cómo lo viviste hoy? Algo que aprendiste o algo que agradeces.':'Anota cuándo lo recordaste, dónde lo viste o algo que Dios te muestre.';
+    noteIn.placeholder=late?'¿Cómo lo viviste hoy?':'¿Dónde lo estás viendo hoy?';
+    ((d&&d.notes)||[]).forEach(function(n,i){
+      var li=document.createElement('li'),tm=document.createElement('time'),p=document.createElement('p');
+      tm.textContent=n.at?hourOf(n.at):'';p.textContent=n.text;
+      var x=document.createElement('button');x.className='icon-btn';x.setAttribute('aria-label','Borrar esta nota');
+      x.innerHTML='<svg class="ico" viewBox="0 0 24 24"><use href="#i-x"/></svg>';
+      x.onclick=function(){if(confirm('¿Borrar esta nota?')){d.notes.splice(i,1);save();renderNotes();}};
+      li.appendChild(tm);li.appendChild(p);li.appendChild(x);ul.appendChild(li);
+    });
+  }
 
   function renderToday(){
     var d=today();
     if(d&&d.intention){
       $('ask').hidden=true;$('show').hidden=false;
       $('intention-text').textContent=d.intention;
-      $('rem-count').textContent=d.remembered||0;
-      $('in-reflection').value=d.reflection||'';
+      renderNotes();
       var note;
       if(notifState()!=='on') note='Activa las notificaciones para que te lo recuerde durante el día.';
       else if(d.scheduled>0) note='Te lo recordaré '+d.scheduled+' veces hoy, en momentos sorpresa.';
@@ -368,7 +464,7 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
       var ds=document.createElement('div');ds.className='d';ds.textContent=cap(fmt(fromKey(k),{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
       var t=document.createElement('div');t.className='t';t.textContent=d.intention;
       li.appendChild(ds);li.appendChild(t);
-      if(d.reflection){var r=document.createElement('p');r.className='r';r.textContent=d.reflection;li.appendChild(r);}
+      (d.notes||[]).forEach(function(n){var r=document.createElement('p');r.className='r';r.textContent=(n.at?hourOf(n.at)+' · ':'')+n.text;li.appendChild(r);});
       if(d.remembered){var m=document.createElement('div');m.className='m';m.textContent='Lo recordé '+d.remembered+(d.remembered===1?' vez':' veces');li.appendChild(m);}
       ul.appendChild(li);
     });
