@@ -84,6 +84,32 @@ label.lbl{display:block;font-weight:600;margin:0 0 .5rem}
 .settings p{margin:0 0 1rem}
 .status{font-weight:600}
 
+.welcome{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 1rem) 1.5rem calc(env(safe-area-inset-bottom,0px) + 1.5rem)}
+.welcome[hidden]{display:none}
+.w-inner{max-width:30rem;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+.w-top{display:flex;justify-content:flex-end;min-height:2.5rem}
+.w-skip{background:none;border:0;color:var(--muted);font-size:.95rem;padding:.5rem 0}
+.w-slide{flex:1;display:flex;flex-direction:column;justify-content:center;padding:1rem 0}
+.w-slide[hidden]{display:none}
+.w-slide h2{font-size:2.3rem;line-height:1.1;margin:0 0 1rem}
+.w-slide p{font-size:1.1rem;color:var(--muted);margin:0 0 1rem}
+.w-verse{font-family:var(--serif);font-style:italic;font-size:1.25rem !important;color:var(--ink) !important;border-left:2px solid var(--gold);padding-left:1rem;margin-top:1rem !important}
+.w-art{margin:0 0 2rem}
+.w-sun{width:72px;height:72px;color:var(--gold)}
+.w-notif{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:.85rem 1rem;display:flex;gap:.75rem;align-items:flex-start;box-shadow:0 6px 24px rgba(22,35,58,.08)}
+.w-notif + .w-notif{margin-top:.6rem;opacity:.6;transform:scale(.97)}
+.w-notif img{width:38px;height:38px;border-radius:9px;flex:none}
+.w-notif b{display:block;font-size:.9rem}
+.w-notif span{font-size:.95rem}
+.w-notif small{margin-left:auto;color:var(--muted);font-size:.8rem;white-space:nowrap}
+.w-path{list-style:none;margin:0;padding:0;position:relative}
+.w-path::before{content:"";position:absolute;left:5px;top:.5rem;bottom:.5rem;width:1px;background:var(--line)}
+.w-path li{position:relative;padding:0 0 1rem 1.6rem;font-family:var(--serif);font-style:italic;font-size:1.15rem}
+.w-path li::before{content:"";position:absolute;left:0;top:.45rem;width:11px;height:11px;border-radius:50%;background:var(--gold)}
+.w-path li small{display:block;font-family:var(--sans);font-style:normal;font-size:.8rem;color:var(--muted)}
+.dots{display:flex;gap:.45rem;justify-content:center;margin:0 0 1.25rem}
+.dots span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .2s}
+.dots span.on{background:var(--gold)}
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);display:flex;justify-content:center;z-index:5}
 nav div{display:flex;width:100%;max-width:34rem}
 nav button{flex:1;background:none;border:0;padding:.85rem 0;font-size:.95rem;color:var(--muted);font-weight:500}
@@ -92,6 +118,45 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 </style>
 </head>
 <body>
+<div class="welcome" id="welcome" hidden role="dialog" aria-label="Bienvenida">
+  <div class="w-inner">
+    <div class="w-top"><button class="w-skip" id="w-skip">Saltar</button></div>
+
+    <div class="w-slide" data-s="0">
+      <div class="w-art"><svg class="w-sun" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="26" r="8" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 8v5M8 26H4M40 26h-4M11.5 15.5l3 3M32.5 15.5l-3 3"/><path d="M4 36h36" opacity=".5"/></g></svg></div>
+      <h2>Bienvenido a Recordar hoy</h2>
+      <p>Una herramienta sencilla para crecer en tu fe cada día.</p>
+      <p>Cada mañana anotas lo que Dios te habló en tu devocional: un versículo, una enseñanza o algo que quieres vivir hoy.</p>
+      <p class="w-verse">“Lámpara es a mis pies tu palabra.” <br><small style="font-family:var(--sans);font-style:normal;font-size:.85rem;color:var(--muted)">Salmo 119:105</small></p>
+    </div>
+
+    <div class="w-slide" data-s="1" hidden>
+      <div class="w-art">
+        <div class="w-notif"><img src="/icon-192.png" alt=""><div><b>Recordar hoy ✨</b><span>Tener más temor de Dios</span></div><small>11:42</small></div>
+        <div class="w-notif"><img src="/icon-192.png" alt=""><div><b>Recordar hoy ✨</b><span>Tener más temor de Dios</span></div><small>3:17</small></div>
+      </div>
+      <h2>Dios en medio de tu día</h2>
+      <p>Durante el día te llegará eso que anotaste 4 veces, en momentos sorpresa.</p>
+      <p>Es una invitación a detenerte, volver a Él y vivir lo que leíste, no solo leerlo.</p>
+    </div>
+
+    <div class="w-slide" data-s="2" hidden>
+      <div class="w-art">
+        <ul class="w-path">
+          <li><small>Hoy</small>Tener más temor de Dios</li>
+          <li><small>Ayer</small>Dar gracias en todo</li>
+          <li><small>Domingo</small>Ser paciente con mi familia</li>
+        </ul>
+      </div>
+      <h2>Mira tu camino de fe</h2>
+      <p>En la noche puedes escribir cómo lo viviste. Con el tiempo verás tu proceso: lo que Dios ha ido haciendo en ti.</p>
+      <p>Lo que escribes es privado y queda guardado solo en tu teléfono.</p>
+    </div>
+
+    <div class="dots" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+    <button class="btn gold" id="w-next">Siguiente</button>
+  </div>
+</div>
 <main>
   <section id="v-hoy" class="view on" aria-label="Hoy">
     <p class="date" id="today-date"></p>
@@ -99,7 +164,7 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 
     <div id="ask" class="ask">
       <h1>¿Qué quieres recordar hoy?</h1>
-      <textarea id="in-intention" placeholder="Una frase, un versículo o algo que quieras vivir hoy…" maxlength="200"></textarea>
+      <textarea id="in-intention" placeholder="Algo que Dios te habló en tu devocional, un versículo o algo que quieras vivir hoy…" maxlength="200"></textarea>
       <div class="chips" id="chips"></div>
       <button class="btn" id="save-intention" disabled>Guardar mi intención</button>
     </div>
@@ -138,8 +203,9 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
     <p>Estado: <span class="status" id="notif-status"></span></p>
     <div class="stack" id="notif-actions"></div>
     <h2>Cómo funciona</h2>
-    <p>Cada mañana, en un momento sorpresa entre 6:30 y 9:00, te llega la pregunta. Escribes lo que quieres recordar y durante el día recibes tu frase 4 veces, en horas al azar hasta las 9:30 p. m.</p>
+    <p>Cada mañana, en un momento sorpresa entre 6:30 y 9:00, te llega la pregunta. Anotas lo que Dios te habló en tu devocional o lo que quieres recordar y durante el día recibes tu frase 4 veces, en horas al azar hasta las 9:30 p. m.</p>
     <p>Lo que escribes en tu camino se guarda solo en este teléfono.</p>
+    <button class="btn ghost" id="show-intro">Ver la introducción</button>
     <h2>Compartir</h2>
     <p>Envíale la app a alguien que quieras que camine contigo.</p>
     <button class="btn ghost" id="share">Compartir la app</button>
@@ -156,7 +222,7 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 <script>
 (function(){
   var KEY='recordar-hoy:v1';
-  var SUGG=['Tener más temor de Dios','Hacer mi devocional con calma','Ser paciente con mi familia','Dar gracias en todo','Escuchar antes de hablar','Dios está conmigo hoy'];
+  var SUGG=['Tener más temor de Dios','Orar antes de cada decisión','Hacer mi devocional con calma','Ser paciente con mi familia','Dar gracias en todo','Escuchar antes de hablar','Dios está conmigo hoy'];
   var state={days:{},subId:null};
   try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.days)state=p;}}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
@@ -310,7 +376,7 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
 
   // ---------- Compartir ----------
   $('share').onclick=function(){
-    var url=location.origin,text='Te comparto Recordar hoy: una intención cada día y recordatorios para vivirla con Dios.';
+    var url=location.origin,text='Te comparto Recordar hoy: anotas lo que Dios te habla en tu devocional y durante el día te lo recuerda para vivirlo.';
     if(navigator.share){navigator.share({title:'Recordar hoy',text:text,url:url}).catch(function(){});}
     else if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){$('share-msg').textContent='Enlace copiado';});}
   };
@@ -325,6 +391,22 @@ nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--
       renderAll();window.scrollTo(0,0);
     };
   });
+
+  // ---------- Bienvenida ----------
+  var slide=0,slides=document.querySelectorAll('.w-slide'),dots=document.querySelectorAll('.dots span');
+  function showSlide(i){
+    slide=i;
+    slides.forEach(function(s,j){s.hidden=j!==i;});
+    dots.forEach(function(d,j){d.classList.toggle('on',j===i);});
+    $('w-next').textContent=i===slides.length-1?'Empezar':'Siguiente';
+    $('w-skip').style.visibility=i===slides.length-1?'hidden':'visible';
+  }
+  function openWelcome(){showSlide(0);$('welcome').hidden=false;}
+  function closeWelcome(){$('welcome').hidden=true;state.welcomed=true;save();window.scrollTo(0,0);}
+  $('w-next').onclick=function(){if(slide<slides.length-1)showSlide(slide+1);else closeWelcome();};
+  $('w-skip').onclick=closeWelcome;
+  $('show-intro').onclick=openWelcome;
+  if(!state.welcomed) openWelcome();
 
   function renderAll(){renderNotice();renderToday();renderPath();renderSettings();}
   renderAll();
