@@ -2,6 +2,12 @@ import { subs, getSender, rand, localToday, dayKey } from "../lib/core.mjs";
 
 const HOUR = 60 * 60 * 1000;
 
+// Si a estas horas todavía no ha escrito nada, se le recuerda con cariño.
+const NUDGES = [
+  { from: [12, 0], to: [13, 0], body: "🙏 ¿Qué te ha dicho Dios hoy? Escríbelo y te lo recuerdo durante el día." },
+  { from: [17, 30], to: [18, 30], body: "🕊️ Todavía estás a tiempo: ¿qué te ha dicho Dios hoy?" },
+];
+
 // Corre cada 5 minutos: manda la pregunta de la mañana y los recordatorios que ya tocan.
 export default async () => {
   const store = subs();
@@ -30,6 +36,20 @@ export default async () => {
       rec.morningSent = true;
       changed = true;
     }
+    if (rec.nudgeDay !== today) {
+      rec.nudgeDay = today;
+      rec.nudges = NUDGES.map((n) => {
+        const to = localToday(tz, now, ...n.to);
+        return { at: rand(localToday(tz, now, ...n.from), to), sent: now > to };
+      });
+      changed = true;
+    }
+    rec.nudges.forEach((n, i) => {
+      if (n.sent || now < n.at) return;
+      if (rec.intentionDay !== today) out.push({ title: "Recordar hoy", body: NUDGES[i].body, tag: "nudge" });
+      n.sent = true;
+      changed = true;
+    });
     for (const r of rec.reminders || []) {
       if (!r.sent && now >= r.at) {
         if (now - r.at < 3 * HOUR && rec.intention) out.push({ title: "Recordar hoy ✨", body: rec.intention, tag: "r" + r.at });
