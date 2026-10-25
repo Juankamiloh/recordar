@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recordar hoy</title>
+<meta name="description" content="Una intención cada día y recordatorios para vivirla con Dios.">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Recordar hoy">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#EEF2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1726" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F7; --surface:#FFFFFF; --ink:#16233A; --muted:#5B6B82;
+  --gold:#B7801C; --gold-soft:#F5E6C8; --line:#D6DEE9;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0F1726; --surface:#182238; --ink:#E7ECF4; --muted:#93A1B8; --gold:#E3B458; --gold-soft:#2C2A22; --line:#26324A; }
+}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+main{max-width:34rem;margin:0 auto;padding:1.5rem 1.25rem calc(7rem + env(safe-area-inset-bottom,0px))}
+h1,h2{font-family:var(--serif);font-weight:400;margin:0}
+button,textarea,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.date{color:var(--muted);font-size:.95rem;margin:0 0 1.5rem}
+.view{display:none}.view.on{display:block}
+
+.notice{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;padding:1rem 1.1rem;margin:0 0 2rem}
+.notice p{margin:0 0 .75rem}
+.notice p:last-child{margin-bottom:0}
+.notice ol{margin:.25rem 0 0;padding-left:1.2rem}
+.notice li{margin-bottom:.35rem}
+
+.ask h1{font-size:2.1rem;line-height:1.15;margin-bottom:1.25rem}
+textarea{width:100%;min-height:7rem;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:1rem;font-family:var(--serif);font-size:1.3rem;line-height:1.4;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 1.5rem}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:.4rem .85rem;font-size:.9rem;color:var(--muted)}
+.btn{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:14px;padding:.95rem 1rem;font-weight:600;background:var(--ink);color:var(--bg)}
+.btn.gold{background:var(--gold);color:#1a1405}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500}
+.btn:disabled{opacity:.4;cursor:default}
+.stack>*+*{margin-top:.75rem}
+
+.sun{width:44px;height:44px;margin-bottom:1rem;color:var(--gold)}
+.intention{font-family:var(--serif);font-style:italic;font-size:clamp(2rem,8vw,2.8rem);line-height:1.12;margin:0 0 .75rem;overflow-wrap:anywhere}
+.sub{color:var(--muted);margin:0 0 2rem}
+.count{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:2rem 0}
+.count strong{font-family:var(--serif);font-size:2.2rem;font-weight:400;line-height:1;min-width:2ch}
+.count span{color:var(--muted);font-size:.95rem;flex:1}
+.count button{border:1px solid var(--gold);background:var(--gold-soft);color:var(--ink);border-radius:999px;padding:.5rem 1rem;font-weight:500}
+label.lbl{display:block;font-weight:600;margin:0 0 .5rem}
+.saved{color:var(--gold);font-size:.9rem;min-height:1.4em;margin:.4rem 0 0}
+.link{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;font-size:.9rem;margin-top:1.5rem}
+
+.stats{display:flex;gap:2rem;margin:1rem 0 2rem}
+.stats div{font-size:.9rem;color:var(--muted)}
+.stats b{display:block;font-family:var(--serif);font-weight:400;font-size:2.2rem;color:var(--ink);line-height:1.1}
+.path{list-style:none;margin:0;padding:0;position:relative}
+.path::before{content:"";position:absolute;left:5px;top:.6rem;bottom:.6rem;width:1px;background:var(--line)}
+.path li{position:relative;padding:0 0 1.75rem 1.75rem}
+.path li::before{content:"";position:absolute;left:0;top:.5rem;width:11px;height:11px;border-radius:50%;background:var(--gold)}
+.path li.empty::before{display:none}
+.path .d{font-size:.85rem;color:var(--muted)}
+.path .t{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.25;margin:.1rem 0 .3rem}
+.path .r{margin:.25rem 0 0;font-size:.95rem}
+.path .m{font-size:.85rem;color:var(--muted)}
+.empty{color:var(--muted);padding-left:0 !important}
+
+.settings h1{font-size:2rem;margin-bottom:1.5rem}
+.settings h2{font-size:1.35rem;margin:2rem 0 .5rem}
+.settings p{margin:0 0 1rem}
+.status{font-weight:600}
+
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);display:flex;justify-content:center;z-index:5}
+nav div{display:flex;width:100%;max-width:34rem}
+nav button{flex:1;background:none;border:0;padding:.85rem 0;font-size:.95rem;color:var(--muted);font-weight:500}
+nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--gold)}
+@media (prefers-reduced-motion:no-preference){.intention{animation:rise .6s ease-out}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<main>
+  <section id="v-hoy" class="view on" aria-label="Hoy">
+    <p class="date" id="today-date"></p>
+    <div id="notice"></div>
+
+    <div id="ask" class="ask">
+      <h1>¿Qué quieres recordar hoy?</h1>
+      <textarea id="in-intention" placeholder="Una frase, un versículo o algo que quieras vivir hoy…" maxlength="200"></textarea>
+      <div class="chips" id="chips"></div>
+      <button class="btn" id="save-intention" disabled>Guardar mi intención</button>
+    </div>
+
+    <div id="show" hidden>
+      <svg class="sun" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="26" r="8" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 8v5M8 26H4M40 26h-4M11.5 15.5l3 3M32.5 15.5l-3 3"/><path d="M4 36h36" opacity=".5"/></g></svg>
+      <p class="intention" id="intention-text"></p>
+      <p class="sub" id="sched-note"></p>
+
+      <div class="count">
+        <strong id="rem-count">0</strong>
+        <span>veces que me detuve a recordarlo hoy</span>
+        <button id="rem-btn">Lo recordé</button>
+      </div>
+
+      <label class="lbl" for="in-reflection">Al final del día: ¿cómo lo viviste?</label>
+      <textarea id="in-reflection" placeholder="Algo que aprendiste, un momento en que lo aplicaste, algo que agradecer…"></textarea>
+      <p class="saved" id="refl-saved" aria-live="polite"></p>
+
+      <button class="link" id="edit">Cambiar la intención de hoy</button>
+    </div>
+  </section>
+
+  <section id="v-camino" class="view" aria-label="Mi camino">
+    <h1 style="font-size:2rem">Mi camino</h1>
+    <div class="stats">
+      <div><b id="st-days">0</b>días con propósito</div>
+      <div><b id="st-streak">0</b>días seguidos</div>
+    </div>
+    <ul class="path" id="path"></ul>
+  </section>
+
+  <section id="v-ajustes" class="view settings" aria-label="Ajustes">
+    <h1>Ajustes</h1>
+    <h2>Notificaciones</h2>
+    <p>Estado: <span class="status" id="notif-status"></span></p>
+    <div class="stack" id="notif-actions"></div>
+    <h2>Cómo funciona</h2>
+    <p>Cada mañana, en un momento sorpresa entre 6:30 y 9:00, te llega la pregunta. Escribes lo que quieres recordar y durante el día recibes tu frase 4 veces, en horas al azar hasta las 9:30 p. m.</p>
+    <p>Lo que escribes en tu camino se guarda solo en este teléfono.</p>
+    <h2>Compartir</h2>
+    <p>Envíale la app a alguien que quieras que camine contigo.</p>
+    <button class="btn ghost" id="share">Compartir la app</button>
+    <p class="saved" id="share-msg" aria-live="polite"></p>
+  </section>
+</main>
+
+<nav><div>
+  <button data-v="hoy" aria-current="page">Hoy</button>
+  <button data-v="camino">Mi camino</button>
+  <button data-v="ajustes">Ajustes</button>
+</div></nav>
+
+<script>
+(function(){
+  var KEY='recordar-hoy:v1';
+  var SUGG=['Tener más temor de Dios','Hacer mi devocional con calma','Ser paciente con mi familia','Dar gracias en todo','Escuchar antes de hablar','Dios está conmigo hoy'];
+  var state={days:{},subId:null};
+  try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.days)state=p;}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+  var $=function(id){return document.getElementById(id);};
+  var tz=(function(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone;}catch(e){return 'UTC';}})();
+
+  function keyOf(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function fromKey(k){var a=k.split('-');return new Date(+a[0],a[1]-1,+a[2]);}
+  function fmt(d,o){try{return d.toLocaleDateString('es',o);}catch(e){return d.toDateString();}}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  var todayKey=keyOf(new Date());
+  function today(){return state.days[todayKey];}
+  $('today-date').textContent=cap(fmt(new Date(),{weekday:'long',day:'numeric',month:'long'}));
+
+  // ---------- Notificaciones ----------
+  var isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  var canPush='serviceWorker' in navigator&&'PushManager' in window&&'Notification' in window;
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(function(){});}
+
+  function notifState(){
+    if(!canPush) return (isIOS&&!standalone)?'install':'unsupported';
+    if(Notification.permission==='denied') return 'denied';
+    if(Notification.permission==='granted'&&state.subId) return 'on';
+    return 'off';
+  }
+  function api(path,body){
+    return fetch('/api/'+path,body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}:{}).then(function(r){
+      return r.json().then(function(j){if(!r.ok)throw j;return j;});
+    });
+  }
+  function b64ToBytes(s){var pad='='.repeat((4-s.length%4)%4);var b=atob((s+pad).replace(/-/g,'+').replace(/_/g,'/'));var out=new Uint8Array(b.length);for(var i=0;i<b.length;i++)out[i]=b.charCodeAt(i);return out;}
+
+  function subscribe(){
+    return navigator.serviceWorker.ready.then(function(reg){
+      return reg.pushManager.getSubscription().then(function(existing){
+        if(existing) return existing;
+        return api('vapid').then(function(v){return reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(v.publicKey)});});
+      });
+    }).then(function(sub){
+      return api('subscribe',{subscription:sub.toJSON(),tz:tz,id:state.subId});
+    }).then(function(res){state.subId=res.id;save();});
+  }
+
+  function enable(btn){
+    if(btn){btn.disabled=true;btn.textContent='Activando…';}
+    Notification.requestPermission().then(function(p){
+      if(p!=='granted') throw new Error('denied');
+      return subscribe();
+    }).then(function(){
+      var d=today(); if(d&&d.intention) return sendIntention(d);
+    }).catch(function(){}).then(renderAll);
+  }
+
+  function disable(){
+    var id=state.subId; state.subId=null; save();
+    if(id) api('unsubscribe',{id:id}).catch(function(){});
+    if(canPush) navigator.serviceWorker.ready.then(function(r){return r.pushManager.getSubscription();}).then(function(s){if(s)return s.unsubscribe();}).catch(function(){});
+    renderAll();
+  }
+
+  function sendIntention(d){
+    if(!state.subId) return Promise.resolve();
+    return api('intention',{id:state.subId,intention:d.intention,tz:tz}).then(function(r){
+      d.scheduled=r.count; save();
+    }).catch(function(e){
+      if(e&&e.error==='not_subscribed'){state.subId=null;save();return subscribe().then(function(){return sendIntention(d);});}
+    });
+  }
+
+  function renderNotice(){
+    var box=$('notice'),s=notifState();box.innerHTML='';
+    if(s==='on') return;
+    var n=document.createElement('div');n.className='notice';
+    if(s==='install'){
+      n.innerHTML='<p><b>Para recibir los recordatorios</b>, agrega la app a tu pantalla de inicio:</p><ol><li>Toca el botón <b>Compartir</b> de Safari (el cuadrito con la flecha).</li><li>Elige <b>Agregar a inicio</b>.</li><li>Abre <b>Recordar hoy</b> desde el ícono nuevo.</li></ol>';
+    }else if(s==='off'){
+      n.innerHTML='<p>Activa las notificaciones para recibir la pregunta de cada mañana y tus 4 recordatorios del día.</p>';
+      var b=document.createElement('button');b.className='btn gold';b.textContent='Activar notificaciones';b.onclick=function(){enable(b);};n.appendChild(b);
+    }else if(s==='denied'){
+      n.innerHTML='<p>Las notificaciones están bloqueadas. Actívalas en <b>Ajustes del teléfono → Notificaciones → Recordar hoy</b> y vuelve a abrir la app.</p>';
+    }else{
+      n.innerHTML='<p>Este navegador no permite notificaciones. Abre la app en Safari (iPhone) o Chrome (Android).</p>';
+    }
+    box.appendChild(n);
+  }
+
+  function renderSettings(){
+    var s=notifState(),st=$('notif-status'),a=$('notif-actions');a.innerHTML='';
+    st.textContent={on:'activadas',off:'apagadas',denied:'bloqueadas en el teléfono',install:'falta agregar la app a inicio',unsupported:'no disponibles en este navegador'}[s];
+    if(s==='on'){var b=document.createElement('button');b.className='btn ghost';b.textContent='Desactivar notificaciones';b.onclick=disable;a.appendChild(b);}
+    if(s==='off'){var c=document.createElement('button');c.className='btn gold';c.textContent='Activar notificaciones';c.onclick=function(){enable(c);};a.appendChild(c);}
+  }
+
+  // ---------- Hoy ----------
+  SUGG.forEach(function(s){var b=document.createElement('button');b.className='chip';b.type='button';b.textContent=s;b.onclick=function(){$('in-intention').value=s;updSave();};$('chips').appendChild(b);});
+  function updSave(){$('save-intention').disabled=!$('in-intention').value.trim();}
+  $('in-intention').addEventListener('input',updSave);
+
+  $('save-intention').onclick=function(){
+    var t=$('in-intention').value.trim();if(!t)return;
+    var d=today()||{remembered:0,reflection:''};
+    d.intention=t;d.scheduled=null;state.days[todayKey]=d;save();renderToday();
+    $('save-intention').disabled=true;
+    sendIntention(d).then(renderToday);
+  };
+  $('edit').onclick=function(){$('in-intention').value=(today()||{}).intention||'';updSave();$('ask').hidden=false;$('show').hidden=true;$('in-intention').focus();};
+  $('rem-btn').onclick=function(){var d=today();if(!d)return;d.remembered=(d.remembered||0)+1;save();$('rem-count').textContent=d.remembered;};
+  var rt;
+  $('in-reflection').addEventListener('input',function(){
+    var d=today();if(!d)return;d.reflection=this.value;clearTimeout(rt);
+    rt=setTimeout(function(){save();$('refl-saved').textContent='Guardado';setTimeout(function(){$('refl-saved').textContent='';},1500);},500);
+  });
+
+  function renderToday(){
+    var d=today();
+    if(d&&d.intention){
+      $('ask').hidden=true;$('show').hidden=false;
+      $('intention-text').textContent=d.intention;
+      $('rem-count').textContent=d.remembered||0;
+      $('in-reflection').value=d.reflection||'';
+      var note;
+      if(notifState()!=='on') note='Activa las notificaciones para que te lo recuerde durante el día.';
+      else if(d.scheduled>0) note='Te lo recordaré '+d.scheduled+' veces hoy, en momentos sorpresa.';
+      else if(d.scheduled===0) note='Ya es tarde para recordatorios hoy. Mañana temprano te pregunto de nuevo.';
+      else note='Programando tus recordatorios…';
+      $('sched-note').textContent=note;
+    }else{$('ask').hidden=false;$('show').hidden=true;}
+  }
+
+  // ---------- Camino ----------
+  function renderPath(){
+    var keys=Object.keys(state.days).filter(function(k){return state.days[k].intention;}).sort().reverse();
+    $('st-days').textContent=keys.length;
+    var streak=0,c=new Date();
+    if(!(state.days[keyOf(c)]&&state.days[keyOf(c)].intention))c.setDate(c.getDate()-1);
+    while(state.days[keyOf(c)]&&state.days[keyOf(c)].intention){streak++;c.setDate(c.getDate()-1);}
+    $('st-streak').textContent=streak;
+    var ul=$('path');ul.innerHTML='';
+    if(!keys.length){var e=document.createElement('li');e.className='empty';e.textContent='Aquí verás cada día que vivas con propósito. Empieza escribiendo tu intención en Hoy.';ul.appendChild(e);return;}
+    keys.forEach(function(k){
+      var d=state.days[k],li=document.createElement('li');
+      var ds=document.createElement('div');ds.className='d';ds.textContent=cap(fmt(fromKey(k),{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
+      var t=document.createElement('div');t.className='t';t.textContent=d.intention;
+      li.appendChild(ds);li.appendChild(t);
+      if(d.reflection){var r=document.createElement('p');r.className='r';r.textContent=d.reflection;li.appendChild(r);}
+      if(d.remembered){var m=document.createElement('div');m.className='m';m.textContent='Lo recordé '+d.remembered+(d.remembered===1?' vez':' veces');li.appendChild(m);}
+      ul.appendChild(li);
+    });
+  }
+
+  // ---------- Compartir ----------
+  $('share').onclick=function(){
+    var url=location.origin,text='Te comparto Recordar hoy: una intención cada día y recordatorios para vivirla con Dios.';
+    if(navigator.share){navigator.share({title:'Recordar hoy',text:text,url:url}).catch(function(){});}
+    else if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){$('share-msg').textContent='Enlace copiado';});}
+  };
+
+  // ---------- Pestañas ----------
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('nav button').forEach(function(x){x.removeAttribute('aria-current');});
+      b.setAttribute('aria-current','page');
+      document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on');});
+      $('v-'+b.dataset.v).classList.add('on');
+      renderAll();window.scrollTo(0,0);
+    };
+  });
+
+  function renderAll(){renderNotice();renderToday();renderPath();renderSettings();}
+  renderAll();
+
+  // Al abrir: renueva la suscripción (zona horaria al día) y reintenta si quedó pendiente
+  if(notifState()==='on'){
+    subscribe().then(function(){var d=today();if(d&&d.intention&&(d.scheduled===null||d.scheduled===undefined))return sendIntention(d);}).catch(function(){}).then(renderAll);
+  }
+})();
+</script>
+</body>
+</html>
