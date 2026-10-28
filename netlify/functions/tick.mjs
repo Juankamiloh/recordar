@@ -33,7 +33,8 @@ export default async () => {
       changed = true;
     }
     if (!rec.morningSent && now >= rec.morningAt) {
-      out.push({ title: "Buenos días", body: "¿Qué quieres recordar hoy?", tag: "morning" });
+      // Si ya escribió antes de la hora sorpresa, la pregunta sobra.
+      if (rec.intentionDay !== today) out.push({ title: "Buenos días", body: "¿Qué quieres recordar hoy?", tag: "morning" });
       rec.morningSent = true;
       changed = true;
     }

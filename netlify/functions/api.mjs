@@ -42,11 +42,13 @@ export default async (req) => {
       const now = Date.now();
       const start = now + 20 * MIN;
       const end = localToday(tz, now, 21, 30);
+      // Cada persona elige cuántas veces al día (1 a 8); si no dice, 4.
+      const perDay = Number.isInteger(body.perDay) && body.perDay >= 1 && body.perDay <= 8 ? body.perDay : 4;
       let times = [];
       if (end - start >= 30 * MIN) {
-        // 4 momentos al azar, repartidos para que no queden pegados
-        const slot = (end - start) / 4;
-        for (let i = 0; i < 4; i++) times.push(rand(start + i * slot, start + (i + 1) * slot - MIN));
+        // Momentos al azar, repartidos para que no queden pegados
+        const slot = (end - start) / perDay;
+        for (let i = 0; i < perDay; i++) times.push(rand(start + i * slot, start + (i + 1) * slot - MIN));
       }
       rec.intention = intention;
       rec.intentionDay = dayKey(tz, now);
