@@ -65,6 +65,7 @@ textarea{width:100%;min-height:7rem;border:1px solid var(--line);background:var(
 .btn.gold{background:var(--gold);color:#1a1405}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);font-weight:500}
 .btn:disabled{opacity:.4;cursor:default}
+.btn[hidden]{display:none}
 .stack>*+*{margin-top:.75rem}
 
 .ico{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -170,6 +171,23 @@ nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:
 nav div{display:flex;width:100%;max-width:34rem}
 nav button{flex:1;background:none;border:0;padding:.85rem 0;font-size:.95rem;color:var(--muted);font-weight:500}
 nav button[aria-current="page"]{color:var(--ink);box-shadow:inset 0 2px 0 var(--gold)}
+/* Guía para agregar la app al inicio: hoja que sube desde abajo */
+.sheet{position:fixed;inset:auto 0 0;width:100%;max-width:34rem;max-height:90dvh;margin:0 auto;overflow-y:auto;border:0;border-radius:20px 20px 0 0;background:var(--surface);color:var(--ink);padding:1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom,0px))}
+.sheet[open]{animation:sheet-in .28s cubic-bezier(.23,1,.32,1)}
+.sheet::backdrop{background:rgba(0,0,0,.45)}
+.sheet-top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.sheet-top h2{font-size:1.6rem}
+.sheet-sub{color:var(--muted);font-size:.95rem;margin:.35rem 0 1rem}
+.seg{display:flex;gap:3px;background:var(--bg);border-radius:999px;padding:3px;margin:0 0 .5rem}
+.seg button{flex:1;min-height:40px;border:0;border-radius:999px;background:none;color:var(--muted);font-weight:600}
+.seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.steps{list-style:none;counter-reset:step;margin:0 0 1rem;padding:0}
+.steps li{counter-increment:step;display:flex;gap:.8rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.steps li::before{content:counter(step);flex:none;width:1.65rem;height:1.65rem;border-radius:999px;display:grid;place-items:center;background:var(--gold-soft);color:var(--gold);font-size:.85rem;font-weight:600}
+.steps .ico{width:19px;height:19px;vertical-align:-.25em;color:var(--gold)}
+@keyframes sheet-in{from{transform:translateY(100%)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.sheet[open]{animation:none}}
 /* En el plan gratis Netlify pone su burbuja abajo a la derecha: las pestañas suben para que no las tape. */
 body.nf-badge nav{padding-bottom:max(calc(env(safe-area-inset-bottom,0px) + 1.9rem),3.6rem)}
 body.nf-badge main{padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px))}
@@ -186,6 +204,8 @@ body.nf-badge main{padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px))}
   <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7 4.5 3.5 5v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5zM12 6.5V20"/></symbol>
   <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+  <symbol id="i-add" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r=".8"/><circle cx="12" cy="12" r=".8"/><circle cx="12" cy="18.5" r=".8"/></symbol>
 </svg>
 <div class="welcome" id="welcome" hidden role="dialog" aria-label="Bienvenida">
   <div class="w-inner">
@@ -294,6 +314,7 @@ body.nf-badge main{padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px))}
     </div>
 
     <div class="group" style="margin-top:1.75rem">
+      <button class="row" id="show-install"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-add"/></svg><span class="rl">Agregar a la pantalla de inicio</span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
       <button class="row" id="share"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg><span class="rl">Compartir la app</span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
       <button class="row" id="show-intro"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-book"/></svg><span class="rl">Ver la introducción</span><svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></button>
     </div>
@@ -301,6 +322,31 @@ body.nf-badge main{padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px))}
     <p class="saved foot" id="share-msg" aria-live="polite"></p>
   </section>
 </main>
+
+<dialog class="sheet" id="install" aria-labelledby="install-h">
+  <div class="sheet-top">
+    <h2 id="install-h">Agrégala a tu inicio</h2>
+    <button class="icon-btn" id="install-close" aria-label="Cerrar"><svg class="ico" viewBox="0 0 24 24"><use href="#i-x"/></svg></button>
+  </div>
+  <p class="sheet-sub" id="install-sub">Queda con su ícono, se abre como una app y en iPhone es lo que permite recibir notificaciones.</p>
+  <div class="seg" role="tablist" aria-label="Tipo de teléfono">
+    <button role="tab" id="tab-ios" aria-controls="steps-ios">iPhone</button>
+    <button role="tab" id="tab-android" aria-controls="steps-android">Android</button>
+  </div>
+  <ol class="steps" id="steps-ios" role="tabpanel" aria-labelledby="tab-ios">
+    <li><span>Abre esta página en <b>Safari</b>.</span></li>
+    <li><span>Toca <b>Compartir</b> <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg> abajo en la pantalla. Si no lo ves, toca primero los tres puntos.</span></li>
+    <li><span>Baja y elige <b>Agregar a inicio</b> <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-add"/></svg></span></li>
+    <li><span>Toca <b>Agregar</b> y abre <b>Recordar hoy</b> desde el ícono nuevo.</span></li>
+  </ol>
+  <ol class="steps" id="steps-android" role="tabpanel" aria-labelledby="tab-android" hidden>
+    <li><span>Abre esta página en <b>Chrome</b>.</span></li>
+    <li><span>Toca el menú <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-dots"/></svg> arriba a la derecha.</span></li>
+    <li><span>Elige <b>Instalar app</b> o <b>Agregar a la pantalla principal</b>.</span></li>
+    <li><span>Confirma y abre <b>Recordar hoy</b> desde el ícono nuevo.</span></li>
+  </ol>
+  <button class="btn gold" id="install-now" hidden>Instalar ahora</button>
+</dialog>
 
 <nav><div>
   <button data-v="hoy" aria-current="page">Hoy</button>
@@ -564,6 +610,30 @@ body.nf-badge main{padding-bottom:calc(9rem + env(safe-area-inset-bottom,0px))}
   $('w-next').onclick=function(){if(slide<slides.length-1)showSlide(slide+1);else closeWelcome();};
   $('w-skip').onclick=closeWelcome;
   $('show-intro').onclick=openWelcome;
+
+  // ---------- Agregar al inicio ----------
+  var installEvent=null;
+  function showPhone(ios){
+    $('tab-ios').setAttribute('aria-selected',ios);$('tab-android').setAttribute('aria-selected',!ios);
+    $('steps-ios').hidden=!ios;$('steps-android').hidden=ios;
+    $('install-now').hidden=ios||!installEvent;
+  }
+  $('tab-ios').onclick=function(){showPhone(true);};
+  $('tab-android').onclick=function(){showPhone(false);};
+  $('show-install').onclick=function(){
+    if(standalone)$('install-sub').textContent='Ya la tienes en tu inicio. Estos son los pasos por si quieres ayudar a alguien más.';
+    showPhone(isIOS||!/android/i.test(navigator.userAgent));
+    $('install').showModal();
+  };
+  $('install-close').onclick=function(){$('install').close();};
+  $('install').addEventListener('click',function(e){if(e.target===this)this.close();});
+  // Chrome en Android deja instalar con un solo toque; Safari no lo permite.
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();installEvent=e;});
+  $('install-now').onclick=function(){
+    if(!installEvent)return;
+    installEvent.prompt();
+    installEvent.userChoice.then(function(){installEvent=null;$('install-now').hidden=true;$('install').close();});
+  };
   if(!state.welcomed) openWelcome();
 
   var badgeTries=0;(function findBadge(){
